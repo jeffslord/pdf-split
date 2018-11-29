@@ -5,6 +5,9 @@ import os
 import pyhdb
 import time
 
+from dotenv import load_dotenv
+load_dotenv()
+
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description='arguments')
@@ -18,7 +21,10 @@ def main(args):
     # Parse the arguments passed from command line
     args = parse_args(args)
     # Call split function
-    split_pdf(args.pdf, args.dest)
+    # split_pdf(args.pdf, args.dest)
+    conn = connect_hdb()
+    # cur = conn.cursor()
+    print(conn)
 
 
 def split_pdf(pdf_path, destination):
@@ -70,10 +76,10 @@ def split_pdf(pdf_path, destination):
 def connect_hdb():
     """Connect to Hana Database and return the connection object."""
     connection = pyhdb.connect(
-        host="host",
-        port=12345,
-        user="user",
-        password="pass"
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASS")
     )
     return connection
 
